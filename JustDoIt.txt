@@ -1,0 +1,187 @@
+1.)
+SELECT FirstName || " " ||LastName AS FullName, CustomerId, Country
+FROM Customer
+WHERE Country != 'USA'
+
+2.)
+SELECT *
+FROM Customer
+WHERE Country = 'Brazil'
+
+3.)
+SELECT Customer.FirstName || " " ||Customer.LastName AS FullName, Invoice.InvoiceId, Invoice.BillingCountry, Invoice.InvoiceDate
+FROM Invoice
+INNER JOIN Customer
+WHERE BillingCountry = 'Brazil'
+
+4.)
+SELECT *
+FROM Employee
+WHERE Title = 'Sales Support Agent'
+
+5.)
+SELECT *
+FROM Invoice
+WHERE BillingCountry LIKE ('%nd')
+
+6.)
+SELECT e.FirstName || " " || e.LastName AS SalesAgent, i.*
+FROM Employee e
+INNER JOIN Customer c 
+ON e.EmployeeID = c.SupportRepId
+INNER JOIN Invoice i 
+
+ON c.CustomerId = i.CustomerId
+WHERE e.Title = "Sales Support Agent"
+ORDER BY SalesAgent
+
+8.)
+SELECT count(InvoiceDate)
+FROM(select InvoiceDate FROM Invoice WHERE InvoiceDate >= '2009-01-01 00:00:00' and InvoiceDate  < '2010-01-01 00:00:00'
+UNION
+Select InvoiceDate
+FROM Invoice
+WHERE InvoiceDate >= '2011-01-01 00:00:00' and InvoiceDate < '2012-01-01 00:00:00')
+
+SELECT InvoiceDate, sum(Total)
+FROM Invoice
+WHERE InvoiceDate >= '2009-01-01 00:00:00' and InvoiceDate < '2010-01-01 00:00:00'
+UNION
+Select InvoiceDate, sum(Total)
+FROM Invoice
+WHERE InvoiceDate >= '2011-01-01 00:00:00' and InvoiceDate < '2012-01-01 00:00:00'
+
+9.)
+SELECT count(InvoiceId)
+FROM InvoiceLine
+WHERE InvoiceId = 37
+
+10.)
+SELECT InvoiceLineId, count(*)
+FROM InvoiceLine
+GROUP BY InvoiceId
+
+11.)
+SELECT t.TrackId, t.Name, i.InvoiceId, i.InvoiceId, i.UnitPrice, i.Quantity
+FROM Track t
+INNER JOIN
+InvoiceLine i
+ON i.TrackId = t.TrackId
+
+12.)
+SELECT ar.Name AS ArtistName, t.Name, i.*
+FROM Track t
+INNER JOIN Album a
+ON a.AlbumId = t.AlbumId
+INNER JOIN Artist ar
+ON a.ArtistId = ar.ArtistId
+INNER JOIN InvoiceLine i
+ON i.TrackId = t.TrackId
+
+13.)
+SELECT BillingCountry, count(*) 
+FROM Invoice
+GROUP BY BillingCountry
+
+14.)
+SELECT  p.Name, COUNT(pt.TrackId)
+FROM PlaylistTrack pt
+INNER JOIN Playlist P
+ON pt.PlaylistId= p.PlaylistId
+GROUP BY p.PlayListId
+
+15.)
+SELECT t.Name, a.Title, mt.Name, g.Name
+FROM Track t
+INNER JOIN Album a
+ON a.AlbumId = t.AlbumId
+INNER JOIN MediaType mt
+ON mt.MediaTypeId = t.MediatypeId
+INNER JOIN Genre g
+ON g.GenreId = t.GenreId
+
+16.)
+SELECT *, count(InvoiceLineId)
+FROM InvoiceLine
+GROUP BY InvoiceId
+
+17.)
+SELECT e.FirstName || " " || e.LastName AS SalesAgent, sum(i.total)
+FROM Employee e
+INNER JOIN Customer c 
+ON e.EmployeeID = c.SupportRepId
+INNER JOIN Invoice i 
+ON c.CustomerId = i.CustomerId
+WHERE e.Title = "Sales Support Agent"
+GROUP BY SalesAgent
+
+18.)
+SELECT e.FirstName || " " || e.LastName AS SalesAgent, sum(i.total) AS Sum
+FROM Employee e
+INNER JOIN Customer c 
+ON e.EmployeeID = c.SupportRepId
+INNER JOIN Invoice i 
+
+ON c.CustomerId = i.CustomerId
+WHERE e.Title = "Sales Support Agent" AND InvoiceDate LIKE ('%2009%')
+GROUP BY SalesAgent
+ORDER BY Sum DESC
+LIMIT 1
+
+19.)
+SELECT e.FirstName || " " || e.LastName AS SalesAgent, sum(i.total) AS Sum
+FROM Employee e
+INNER JOIN Customer c 
+ON e.EmployeeID = c.SupportRepId
+INNER JOIN Invoice i 
+
+ON c.CustomerId = i.CustomerId
+WHERE e.Title = "Sales Support Agent"
+GROUP BY SalesAgent
+ORDER BY Sum DESC
+LIMIT 1
+
+20.)
+SELECT e.FirstName || " " || e.LastName AS SalesAgent, count(c.FirstName) AS CustomerNum
+FROM Employee e
+INNER JOIN Customer c 
+ON e.EmployeeID = c.SupportRepId
+INNER JOIN Invoice i 
+
+ON c.CustomerId = i.CustomerId
+WHERE e.Title = "Sales Support Agent"
+GROUP BY SalesAgent
+
+21.)
+SELECT c.Country, sum(total) AS TotalSpent
+FROM Employee e
+INNER JOIN Customer c 
+ON e.EmployeeID = c.SupportRepId
+INNER JOIN Invoice i 
+
+ON c.CustomerId = i.CustomerId
+WHERE e.Title = "Sales Support Agent"
+GROUP BY c.Country
+
+22.)
+SELECT t.Name, COUNT(il.InvoiceLineId) AS TotalPurchases
+FROM Track t
+INNER JOIN InvoiceLine il
+ON t.TrackId = il.TrackId
+INNER JOIN Invoice i
+ON i.InvoiceId = il.InvoiceId
+WHERE i.InvoiceDate LIKE ('%2013%')
+GROUP BY t.Name
+ORDER BY TotalPurchases DESC
+
+23.)
+SELECT *
+FROM Invoice i
+INNER JOIN InvoiceLine il
+ON i.InvoiceId = il.InvoiceId
+INNER JOIN Track t
+ON t.TrackId = il.TrackId
+INNER JOIN Album a
+ON a.AlbumId = t.AlbumId
+INNER JOIN Artist ar
+ON ar.ArtistId = a.ArtistId
