@@ -18,7 +18,7 @@ WHERE BillingCountry = 'Brazil'
 SELECT *
 FROM Employee
 WHERE Title = 'Sales Support Agent'
-
+	
 5.)
 SELECT *
 FROM Invoice
@@ -175,13 +175,35 @@ GROUP BY t.Name
 ORDER BY TotalPurchases DESC
 
 23.)
-SELECT *
-FROM Invoice i
+SELECT t.Name, COUNT(il.InvoiceLineId) AS TotalPurchases
+FROM Track t
 INNER JOIN InvoiceLine il
-ON i.InvoiceId = il.InvoiceId
-INNER JOIN Track t
 ON t.TrackId = il.TrackId
+INNER JOIN Invoice i
+ON i.InvoiceId = il.InvoiceId
+GROUP BY t.Name
+ORDER BY TotalPurchases DESC
+
+24.)
+SELECT ar.Name, (il.InvoiceLineId) AS TotalPurchases
+FROM Track t
 INNER JOIN Album a
-ON a.AlbumId = t.AlbumId
+ON t.AlbumId = a.AlbumId
 INNER JOIN Artist ar
-ON ar.ArtistId = a.ArtistId
+ON a.ArtistId = ar.ArtistId
+INNER JOIN InvoiceLine il
+ON t.TrackId = il.TrackId
+GROUP BY ar.Name
+
+25.)
+SELECT mt.Name, (il.InvoiceLineId) AS TotalPurchases
+FROM Track t
+INNER JOIN Album a
+ON t.AlbumId = a.AlbumId
+INNER JOIN Artist ar
+ON a.ArtistId = ar.ArtistId
+INNER JOIN InvoiceLine il
+ON t.TrackId = il.TrackId
+INNER JOIN MediaType mt
+ON mt.MediaTypeId = t.MediaTypeId
+GROUP BY mt.Name
